@@ -84,5 +84,29 @@ class TestFileStorage(unittest.TestCase):
         """test that new adds an object to the database"""
 
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
+    def test_get(self):
+        """Test for get function to check if it retrieves correct
+        object instance from storage
+        """
+        obj = State(name="Test")
+        obj.save()
+        got_obj = models.storage.get('State', obj.id)
+        self.assertIs(obj, got_obj)
+
+        obj.delete()
+
+@unittest.skipIf(models.storage_t != 'db', "not testing db storage")
+    def test_get_checkfail(self):
+        """Test for get function to check if it retrieves objects from
+        storage and returns a different instance from the one created
+        """
+        obj = State(name="Test")
+        obj.save()
+        got_obj = models.storage.get('ls', obj.id)
+        self.assertIsNot(obj, got_obj)
+
+        obj.delete()
+
+    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_save(self):
         """Test that save properly saves objects to file.json"""
