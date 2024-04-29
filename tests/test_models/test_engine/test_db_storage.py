@@ -95,7 +95,7 @@ class TestFileStorage(unittest.TestCase):
 
         obj.delete()
 
-@unittest.skipIf(models.storage_t != 'db', "not testing db storage")
+    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_get_checkfail(self):
         """Test for get function to check if it retrieves objects from
         storage and returns a different instance from the one created
@@ -111,7 +111,7 @@ class TestFileStorage(unittest.TestCase):
     def test_save(self):
         """Test that save properly saves objects to file.json"""
 
- @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
+    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_count(self):
         """Test that the count properly counts objects"""
         num_of_ret_objs = models.storage.count()
