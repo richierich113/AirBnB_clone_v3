@@ -44,7 +44,7 @@ class FileStorage:
         """serializes __objects to the JSON file (path: __file_path)"""
         json_objects = {}
         for key in self.__objects:
-            json_objects[key] = self.__objects[key].to_dict()
+            json_objects[key] = self.__objects[key].to_dict(save_pass=True)
         with open(self.__file_path, 'w') as f:
             json.dump(json_objects, f)
 
@@ -58,15 +58,6 @@ class FileStorage:
         except:
             pass
 
-    def get(self, cls, id):
-    	"""Gets the object matching class and id input"""
-        if not isinstance(cls, type) or not isinstance(id, str):
-            return None
-        for obj in self.__objects.values():
-            if hasattr(obj, 'id') and obj.id == id and obj.__class__ == cls:
-                return obj
-        return None
-
     def delete(self, obj=None):
         """delete obj from __objects if it’s inside"""
         if obj is not None:
@@ -78,6 +69,19 @@ class FileStorage:
         """call reload() method for deserializing the JSON file to objects"""
         self.reload()
 
+    def get(self, cls, id):
+        """gets the object matching class and id input"""
+        if type(cls) != str or type(id) != str:
+            return None
+        for obj in self.__objects.values():
+            if obj.id == id and obj.__class__.__name__ == cls:
+                return obj
+        return None
+
     def count(self, cls=None):
-        """A method to count the number of objects in storage"""
+        """counts the amount of objects matching cls"""
+        if cls is None:
+            return len(self.all())
+        if type(cls) != str:
+            return 0
         return len(self.all(cls))
