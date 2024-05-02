@@ -36,7 +36,8 @@ def handle_state_cities(state_id):
 
 
 @app_views.route('/cities/<string:city_id>',
-    methods=['GET', 'DELETE', 'PUT'], strict_slashes=False)
+    methods=['GET', 'DELETE', 'PUT'],
+    strict_slashes=False)
 def handle_city_with_id(city_id):
     """Handles requests to the /cities/<city_id> route."""
     city = storage.get("City", city_id)
