@@ -1,53 +1,54 @@
 #!/usr/bin/python3
 """
-handles REST API actions for Amenity
+Handles REST API actions for Amenity.
 """
+
 from api.v1.views import app_views
-from flask import jsonify
-from flask import Flask
-from flask import request
-from flask import abort
+from flask import jsonify, Flask, request, abort
 from models import storage
 from models.amenity import Amenity
 
 
 @app_views.route('/amenities', methods=['GET', 'POST'], strict_slashes=False)
-def amenity():
-    """handles amenities route"""
+def handle_amenities():
+    """Handles requests to the /amenities route."""
     if request.method == 'GET':
-        return jsonify(
-            [obj.to_dict() for obj in storage.all("Amenity").values()])
+        return jsonify([amenity.to_dict() for amenity in storage.all("Amenity").values()])
+
     if request.method == 'POST':
-        post_data = request.get_json()
-        if post_data is None or type(post_data) != dict:
+        data = request.get_json()
+        if not isinstance(data, dict):
             return jsonify({'error': 'Not a JSON'}), 400
-        new_name = post_data.get('name')
-        if new_name is None:
+
+        name = data.get('name')
+        if not name:
             return jsonify({'error': 'Missing name'}), 400
-        new_amenity = Ameninity(**post_data)
+
+        new_amenity = Amenity(**data)
         new_amenity.save()
         return jsonify(new_amenity.to_dict()), 201
 
 
-@app_views.route(
-    '/amenities/<string:amenity_id>',
-    methods=['GET', 'DELETE', 'PUT'],
-    strict_slashes=False)
-def amenity_with_id(amenity_id):
-    """handles amenities route with a parameter amenity_id"""
+@app_views.route('/amenities/<string:amenity_id>', methods=['GET', 'DELETE', 'PUT'], strict_slashes=False)
+def handle_amenity_with_id(amenity_id):
+    """Handles requests to the /amenities/<amenity_id> route."""
     amenity = storage.get("Amenity", amenity_id)
     if amenity is None:
         abort(404)
+
     if request.method == 'GET':
         return jsonify(amenity.to_dict())
+
     if request.method == 'DELETE':
         storage.delete(amenity)
         storage.save()
         return jsonify({}), 200
+
     if request.method == 'PUT':
-        put_data = request.get_json()
-        if put_data is None or type(put_data) != dict:
+        data = request.get_json()
+        if not isinstance(data, dict):
             return jsonify({'error': 'Not a JSON'}), 400
-        to_ignore = ['id', 'created_at', 'updated_at']
-        amenity.update(to_ignore, **put_data)
+
+        ignored_keys = ['id', 'created_at', 'updated_at']
+        amenity.update(ignored_keys, **data)
         return jsonify(amenity.to_dict()), 200
