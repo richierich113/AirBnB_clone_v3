@@ -14,16 +14,6 @@ app.register_blueprint(app_views)
 # CORS(app, resources={r'/*': {'origins': '0.0.0.0'}})
 
 
-def not_found_errror_handler(e):
-    """a handler for 404 errors that returns a JSON-formatted
-    404 status code response
-    """
-    err_key = 'error'
-    err_val = "Not found"
-    err_code = 404
-    return jsonify({err_key: err_val}), err_code
-
-
 # Declare a method to handle app teardown
 @app.teardown_appcontext
 def teardown_appcontext(exception):
@@ -32,6 +22,16 @@ def teardown_appcontext(exception):
     Closes the database connection.
     """
     storage.close()
+
+
+def not_found_errror_handler(e):
+    """a handler for 404 errors that returns a JSON-formatted
+    404 status code response
+    """
+    err_key = "error"
+    err_val = "Not found"
+    err_code = 404
+    return jsonify({err_key: err_val}), err_code
 
 
 # Run the Flask server if the script is executed directly
