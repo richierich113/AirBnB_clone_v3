@@ -11,6 +11,7 @@ app = Flask(__name__)
 
 # Register the blueprint app_views to the Flask instance app
 app.register_blueprint(app_views)
+CORS(app, resources={r'/*': {'origins': '0.0.0.0'}})
 
 
 # Declare a method to handle app teardown
