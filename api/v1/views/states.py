@@ -9,7 +9,8 @@ from models import storage
 from models.state import State
 
 
-@app_views.route('/states', methods=['GET', 'POST'], strict_slashes=False)
+@app_views.route('/states', methods=['GET', 'POST'],
+    strict_slashes=False)
 def handle_states():
     """Handles requests to the /states route."""
     if request.method == 'GET':
@@ -30,8 +31,9 @@ def handle_states():
         return jsonify(new_state.to_dict()), 201
 
 
-@app_views.route('/states/<string:state_id>', methods=['GET', 'DELETE', 'PUT'],
-                 strict_slashes=False)
+@app_views.route('/states/<string:state_id>',
+    methods=['GET', 'DELETE', 'PUT'],
+    strict_slashes=False)
 def handle_state_with_id(state_id):
     """Handles requests to the /states/<state_id> route."""
     state = storage.get("State", state_id)
