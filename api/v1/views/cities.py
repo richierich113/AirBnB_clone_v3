@@ -10,7 +10,8 @@ from models.state import State
 from models.city import City
 
 
-@app_views.route('/states/<string:state_id>/cities', methods=['GET', 'POST'], strict_slashes=False)
+@app_views.route('/states/<string:state_id>/cities',
+    methods=['GET', 'POST'], strict_slashes=False)
 def handle_state_cities(state_id):
     """Handles requests to the /states/<state_id>/cities route."""
     my_state = storage.get("State", state_id)
@@ -34,7 +35,8 @@ def handle_state_cities(state_id):
         return jsonify(new_city.to_dict()), 201
 
 
-@app_views.route('/cities/<string:city_id>', methods=['GET', 'DELETE', 'PUT'], strict_slashes=False)
+@app_views.route('/cities/<string:city_id>',
+    methods=['GET', 'DELETE', 'PUT'], strict_slashes=False)
 def handle_city_with_id(city_id):
     """Handles requests to the /cities/<city_id> route."""
     city = storage.get("City", city_id)
